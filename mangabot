@@ -18,37 +18,65 @@ def echo_message(message):
     url = ('https://www.nimeindo.tv/search/?KeyW=' + message.text)  # input url
     response = requests.get(url)
     if "Search NimeIndo Not Found" in response.text:
-        bot.reply_to(message, "Judul Anime Tidak Ditemukan!")
-    else:
-        bot.reply_to(message, "Link Anime")
+        bot.reply_to(message, "Judul Anime atau Manga Tidak Ditemukan!")
+    elif "Search Manga Not Found" in response.text:
+        #Link Anime
         byte_data = response.content
         source_code = html.fromstring(byte_data)
-        tree = source_code.xpath(path)# link anime
-        print("link anime: ", tree[0])  # link anime
-        bot.reply_to(message, tree[0])  #mengirim link anime ke telegram
-    
-        bot.reply_to(message, "Sinopsis Anime")
-        #Sinopsis Anime
+        tree = source_code.xpath(path)
+        linkan = tree[0]
+
+        #Desc Anime
         rest = requests.get(tree[0])
         bt = rest.content
         sc = html.fromstring(bt)
         tr = sc.xpath(path2)
-        print("sinopsis anime:", tr[0].text_content())
-        bot.reply_to(message, tr[0].text_content())
-
-
-        #sinopsis manga
-        bot.reply_to(message, "Link Manga")
+        descan = tr[0].text_content()
+        print("Link : \n"+linkan+"\nDescription : "+descan)
+        bot.reply_to(message, "HASIL PENCARIAN ANIME \nLink : \n"+linkan+"\nDescription : "+descan)
+    elif "Search Anime Not Found" in response.text:
+        #Link Manga
+        byte_data = response.content
+        source_code = html.fromstring(byte_data)
         trii = source_code.xpath(path3)
-        bot.reply_to(message, trii[0])  #kirim link manga ke telegram
-        print("link manga", trii[0])    #link manga
-        bot.reply_to(message, "Sinopsis Manga")
+        linkma = trii[0]
+
+        #Desc Manga
         rs = requests.get(trii[0])
         by = rs.content
         sd = html.fromstring(by)
         treo = sd.xpath(path4)
-        print("sinopsis manga:", treo[0].text_content())
-        bot.reply_to(message, treo[0].text_content())
+        descma = treo[0].text_content()
+        print("Link : \n"+linkma+"\nDescription : "+descma)
+        bot.reply_to(message, "HASIL PENCARIAN MANGA \nLink : \n"+linkma+"\nDescription : "+descma)
+    else:
+        #Link Anime
+        byte_data = response.content
+        source_code = html.fromstring(byte_data)
+        tree = source_code.xpath(path)
+        linkan = tree[0]
+
+        #Desc Anime
+        rest = requests.get(tree[0])
+        bt = rest.content
+        sc = html.fromstring(bt)
+        tr = sc.xpath(path2)
+        descan = tr[0].text_content()
+        print("Link : \n"+linkan+"\nDescription : "+descan)
+        bot.reply_to(message, "HASIL PENCARIAN ANIME \nLink : \n"+linkan+"\nDescription : "+descan)
+
+        #Link Manga
+        trii = source_code.xpath(path3)
+        linkma = trii[0]
+
+        #Desc Manga
+        rs = requests.get(trii[0])
+        by = rs.content
+        sd = html.fromstring(by)
+        treo = sd.xpath(path4)
+        descma = treo[0].text_content()
+        print("Link : \n"+linkma+"\nDescription : "+descma)
+        bot.reply_to(message, "HASIL PENCARIAN MANGA \nLink : \n"+linkma+"\nDescription : "+descma)
 
 
 print('bot start running')
